@@ -27,6 +27,7 @@ function useWidthSetter(view: { setWidth: (arg: number) => void }) {
 const mymodel = AppModel.create({
   msaview: {
     type: 'MsaView',
+    hideGaps: true,
   },
 })
 mymodel.msaview.setHeight(800)
