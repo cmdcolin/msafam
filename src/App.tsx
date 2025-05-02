@@ -1,23 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { observer } from 'mobx-react'
 import { createJBrowseTheme } from '@jbrowse/core/ui/theme'
 import { ThemeProvider } from '@mui/material/styles'
-import { ErrorMessage } from '@jbrowse/core/ui'
 
-import useSWR from 'swr'
-
-import ReactMSAView from './ReactMSAView'
 import Button from './Button'
 import Link from './Link'
-import { geneTreeFetcher } from './ensemblGeneTreeUtils'
-import { treeFamFetcher } from './treeFamUtils'
+import GeneTreeId from './GeneTreeId'
+import TreeFamId from './TreeFamId'
+import { getUrlParams, updateUrlParams } from './urlParams'
+
+const map = {
+  treeFam: 'TreeFam',
+  geneTree: 'GeneTree',
+} as const
 
 const App = observer(function () {
-  const [val, setVal] = useState('')
-  const [id, setId] = useState('')
-  const [type, setType] = useState<'treeFam' | 'geneTree'>('geneTree')
+  const urlParams = getUrlParams()
+  const [val, setVal] = useState(urlParams.id)
+  const [id, setId] = useState(urlParams.id)
+  const [type, setType] = useState<'treeFam' | 'geneTree'>(urlParams.type)
 
-  const str = type === 'treeFam' ? 'TreeFam ID' : 'GeneTree ID'
+  useEffect(() => {
+    updateUrlParams(type, id)
+  }, [type, id])
+
   return (
     <div>
       <div className="m-2 p-2">
@@ -32,6 +38,7 @@ const App = observer(function () {
                 onChange={event => {
                   // @ts-expect-error
                   setType(event.target.value)
+                  setVal('')
                   setId('')
                 }}
               />
@@ -46,13 +53,14 @@ const App = observer(function () {
                 onChange={event => {
                   // @ts-expect-error
                   setType(event.target.value)
+                  setVal('')
                   setId('')
                 }}
               />
               <label htmlFor="treefam">TreeFam (historical)</label>
             </div>
             <div>
-              <label htmlFor="query">Enter {str}:</label>
+              <label htmlFor="query">Enter {map[type]} ID: </label>
               <input
                 id="query"
                 className="bg-gray-200 shadow border rounded"
@@ -89,11 +97,11 @@ const App = observer(function () {
                   <Link
                     href={`https://useast.ensembl.org/Multi/GeneTree/Image?gt=${id}`}
                   >
-                    See at Ensembl
+                    See {id} at Ensembl
                   </Link>
                 ) : (
                   <Link href={`http://www.treefam.org/family/${id}`}>
-                    See at TreeFam
+                    See {id} at TreeFam
                   </Link>
                 )
               ) : null}
@@ -112,33 +120,7 @@ const App = observer(function () {
   )
 })
 
-function TreeFamId({ treeFamId }: { treeFamId: string }) {
-  const { data, isLoading, error } = useSWR(treeFamId, treeFamFetcher)
-  return error ? (
-    <ErrorMessage error={error} />
-  ) : isLoading ? (
-    <div>Loading...</div>
-  ) : data ? (
-    <ReactMSAView msa={data.msa} tree={data.tree} />
-  ) : null
-}
-
-function GeneTreeId({ geneTreeId }: { geneTreeId: string }) {
-  const { data, isLoading, error } = useSWR(geneTreeId, geneTreeFetcher)
-  return error ? (
-    <ErrorMessage error={error} />
-  ) : isLoading ? (
-    <div>Loading...</div>
-  ) : data ? (
-    <ReactMSAView
-      msa={data.msa}
-      tree={data.tree}
-      treeMetadata={data.treeMetadata}
-    />
-  ) : null
-}
-
-const MainApp = () => {
+export default function MainApp() {
   const theme = createJBrowseTheme()
   return (
     <ThemeProvider theme={theme}>
@@ -147,5 +129,3 @@ const MainApp = () => {
     </ThemeProvider>
   )
 }
-
-export default MainApp
