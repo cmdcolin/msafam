@@ -38,6 +38,32 @@ interface Row {
   genomicLocString?: string
 }
 
+/**
+ * Utility function to handle localStorage caching
+ * @param key The base key to use for localStorage
+ * @param fetchFn The function to call if data is not in localStorage
+ * @returns The data, either from localStorage or from the fetch function
+ */
+async function fetchWithLocalStorageCache<T>(
+  key: string,
+  fetchFn: () => Promise<T>,
+): Promise<T> {
+  const cachedData = localStorage.getItem(key)
+
+  if (cachedData) {
+    try {
+      return JSON.parse(cachedData) as T
+    } catch (error) {
+      console.error(`Error parsing cached data for ${key}:`, error)
+      // Continue to fetch fresh data if parsing fails
+    }
+  }
+
+  const data = await fetchFn()
+  localStorage.setItem(key, JSON.stringify(data))
+  return data
+}
+
 function gatherSequencesFromTree(tree: TreeNode, arr: Row[]) {
   if (tree.children) {
     for (const child of tree.children) {
@@ -59,20 +85,18 @@ function gatherSequencesFromTree(tree: TreeNode, arr: Row[]) {
   }
 }
 export async function geneTreeFetcher(id: string) {
-  const r = localStorage.getItem(`${id}-msa`)
-  const s = localStorage.getItem(`${id}-tree`)
-  const msa = r
-    ? JSON.parse(r)
-    : await jsonfetch(
-        `https://rest.ensembl.org/genetree/id/${id}?content-type=application/json;aligned=1;sequence=pep`,
-      )
-  const tree = s
-    ? JSON.parse(s)
-    : await textfetch(
-        `https://rest.ensembl.org/genetree/id/${id}?nh_format=simple;content-type=text/x-nh`,
-      )
-  localStorage.setItem(`${id}-tree`, JSON.stringify(tree))
-  localStorage.setItem(`${id}-msa`, JSON.stringify(msa))
+  const msa = await fetchWithLocalStorageCache<any>(`${id}-msa`, () =>
+    jsonfetch(
+      `https://rest.ensembl.org/genetree/id/${id}?content-type=application/json;aligned=1;sequence=pep`,
+    ),
+  )
+
+  const tree = await fetchWithLocalStorageCache<string>(`${id}-tree`, () =>
+    textfetch(
+      `https://rest.ensembl.org/genetree/id/${id}?nh_format=simple;content-type=text/x-nh`,
+    ),
+  )
+
   const result = [] as Row[]
   gatherSequencesFromTree(msa.tree, result)
 
@@ -80,7 +104,9 @@ export async function geneTreeFetcher(id: string) {
     tree,
     msa: result.map(r => `>${r.id}\n${r.seq}`).join('\n'),
     treeMetadata: JSON.stringify(
-      Object.fromEntries(result.map(r => [r.id, { genome: r.species }])),
+      Object.fromEntries(
+        result.map(r => [r.id, { genome: r.species }] as const),
+      ),
     ),
   }
 }
