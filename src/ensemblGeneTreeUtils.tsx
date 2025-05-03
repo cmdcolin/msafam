@@ -38,12 +38,6 @@ interface Row {
   genomicLocString?: string
 }
 
-/**
- * Utility function to handle localStorage caching
- * @param key The base key to use for localStorage
- * @param fetchFn The function to call if data is not in localStorage
- * @returns The data, either from localStorage or from the fetch function
- */
 async function fetchWithLocalStorageCache<T>(
   key: string,
   fetchFn: () => Promise<T>,
@@ -86,10 +80,12 @@ function gatherSequencesFromTree(tree: TreeNode, arr: Row[] = []): Row[] {
   return arr
 }
 export async function geneTreeFetcher(id: string) {
-  const msa = await fetchWithLocalStorageCache<any>(`${id}-msa`, () =>
-    jsonfetch(
-      `https://rest.ensembl.org/genetree/id/${id}?content-type=application/json;aligned=1;sequence=pep`,
-    ),
+  const msa = await fetchWithLocalStorageCache(
+    `${id}-msa`,
+    () =>
+      jsonfetch(
+        `https://rest.ensembl.org/genetree/id/${id}?content-type=application/json;aligned=1;sequence=pep`,
+      ) as Promise<{ tree: TreeNode }>,
   )
 
   const tree = await fetchWithLocalStorageCache<string>(`${id}-tree`, () =>

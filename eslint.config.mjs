@@ -9,7 +9,12 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'vite.config.ts', 'tailwind.config.js'],
+    ignores: [
+      'dist',
+      'vite.config.ts',
+      'tailwind.config.js',
+      'eslint.config.mjs',
+    ],
   },
   {
     languageOptions: {

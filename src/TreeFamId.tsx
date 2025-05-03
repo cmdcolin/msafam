@@ -4,8 +4,13 @@ import useSWR from 'swr'
 import ReactMSAView from './ReactMSAView'
 import { treeFamFetcher } from './treeFamUtils'
 
+type Ret = Awaited<ReturnType<typeof treeFamFetcher>>
+
 export default function TreeFamId({ treeFamId }: { treeFamId: string }) {
-  const { data, isLoading, error } = useSWR(treeFamId, treeFamFetcher)
+  const { data, isLoading, error } = useSWR<Ret, unknown>(
+    treeFamId,
+    treeFamFetcher,
+  )
   return error ? (
     <ErrorMessage error={error} />
   ) : isLoading ? (
