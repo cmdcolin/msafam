@@ -379,19 +379,20 @@ export function getClustalXColor(
   const ED = E + D
   const TS = T + S
 
-  if (WLVIMAFCHP / total > 0.6 && (
-      l === 'W' ||
+  if (
+    WLVIMAFCHP / total > 0.6 &&
+    (l === 'W' ||
       l === 'L' ||
       l === 'V' ||
       l === 'A' ||
       l === 'I' ||
       l === 'M' ||
       l === 'F' ||
-      l === 'C'
-    )) {
-      // blue from jalview.org docs
-      return 'rgb(128,179,230)'
-    }
+      l === 'C')
+  ) {
+    // blue from jalview.org docs
+    return 'rgb(128,179,230)'
+  }
 
   if (
     (l === 'K' || l === 'R') &&
@@ -478,7 +479,7 @@ export function getClustalXColor(
     // cyan from jalview.org docs
     return 'rgb(26, 179, 179)'
   }
-  return undefined
+  return
 }
 
 // info http://www.jalview.org/help/html/colourSchemes/clustal.html
@@ -506,6 +507,6 @@ export function getPercentIdentityColor(
   const proportion = ent / total
   const thresh = `hsl(240, 30%, ${100 * Math.max(1 - ent / total / 3, 0.3)}%)`
   if (proportion > 0.4 && l === letter) {
-      return thresh
-    }
+    return thresh
+  }
 }

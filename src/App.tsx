@@ -7,16 +7,16 @@ import { observer } from 'mobx-react'
 import GeneTreeId from './GeneTreeId'
 import Header from './Header'
 import TreeFamId from './TreeFamId'
-import { getUrlParams as getUrlParameters, updateUrlParams as updateUrlParameters } from './urlParams'
+import { getUrlParams, updateUrlParams } from './urlParams'
 
 const App = observer(function () {
-  const urlParameters = getUrlParameters()
-  const [value, setValue] = useState(urlParameters.id)
-  const [id, setId] = useState(urlParameters.id)
-  const [type, setType] = useState<'treeFam' | 'geneTree'>(urlParameters.type)
+  const urlParams = getUrlParams()
+  const [value, setValue] = useState(urlParams.id)
+  const [id, setId] = useState(urlParams.id)
+  const [type, setType] = useState<'treeFam' | 'geneTree'>(urlParams.type)
 
   useEffect(() => {
-    updateUrlParameters(type, id)
+    updateUrlParams(type, id)
   }, [type, id])
 
   return (

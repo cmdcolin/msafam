@@ -65,7 +65,7 @@ const ReactMSAView = observer(function ({
             max={100}
             value={msaview.allowedGappyness}
             onChange={(_, val) => {
-              msaview.setAllowedGappyness(val as number)
+              msaview.setAllowedGappyness(val)
             }}
           />
 

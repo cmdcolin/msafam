@@ -5,12 +5,11 @@ import reactCompiler from 'eslint-plugin-react-compiler'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
 import eslintPluginReactRefresh from 'eslint-plugin-react-refresh'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
-import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: ['dist'],
+    ignores: ['dist', 'vite.config.ts', 'tailwind.config.js'],
   },
   {
     languageOptions: {
@@ -56,6 +55,10 @@ export default tseslint.config(
   },
   {
     rules: {
+      'unicorn/prefer-global-this': 'off',
+      'unicorn/no-null': 'off',
+      'unicorn/prevent-abbreviations': 'off',
+      'unicorn/filename-case': 'off',
       'no-restricted-globals': ['error', 'Buffer'],
       'no-empty': 'off',
       'no-console': [
@@ -113,6 +116,8 @@ export default tseslint.config(
         },
       ],
 
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
