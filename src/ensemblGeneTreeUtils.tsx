@@ -3,13 +3,13 @@ async function jsonfetch(url: string, arg?: RequestInit) {
   if (!res.ok) {
     throw new Error(`HTTP ${res.status} from ${url}: ${await res.text()}`)
   }
-  return res.json()
+  return res.json() as Promise<unknown>
 }
 
 async function textfetch(url: string, arg?: RequestInit) {
   const res = await fetch(url, arg)
   if (!res.ok) {
-    throw new Error(`HTTP ${res.status} from ${url}: ${await res.text()}`)
+    throw new Error(`HTTP ${res.status} from ${url}`)
   }
   return res.text()
 }

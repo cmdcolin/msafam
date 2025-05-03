@@ -1,10 +1,11 @@
 export function getUrlParams() {
   const searchParams = new URLSearchParams(window.location.search)
-  const type = searchParams.get('type') as 'treeFam' | 'geneTree' | null
-  const id = searchParams.get('id') || ''
+  const type = searchParams.get('type')
+  const id = searchParams.get('id') ?? ''
   return {
-    type:
-      type && (type === 'treeFam' || type === 'geneTree') ? type : 'geneTree',
+    type: (type && (type === 'treeFam' || type === 'geneTree')
+      ? type
+      : 'geneTree'),
     id,
   }
 }

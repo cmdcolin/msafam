@@ -55,6 +55,7 @@ export default tseslint.config(
   },
   {
     rules: {
+      'unicorn/no-nested-ternary': 'off',
       'unicorn/prefer-global-this': 'off',
       'unicorn/no-null': 'off',
       'unicorn/prevent-abbreviations': 'off',
