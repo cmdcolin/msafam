@@ -1,5 +1,4 @@
 import { ErrorMessage } from '@jbrowse/core/ui'
-
 import useSWR from 'swr'
 
 import ReactMSAView from './ReactMSAView'

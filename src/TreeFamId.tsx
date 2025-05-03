@@ -1,7 +1,8 @@
 import { ErrorMessage } from '@jbrowse/core/ui'
+import useSWR from 'swr'
+
 import ReactMSAView from './ReactMSAView'
 import { treeFamFetcher } from './treeFamUtils'
-import useSWR from 'swr'
 
 export default function TreeFamId({ treeFamId }: { treeFamId: string }) {
   const { data, isLoading, error } = useSWR(treeFamId, treeFamFetcher)

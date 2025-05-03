@@ -1,15 +1,17 @@
-import { isAlive } from 'mobx-state-tree'
-import useMeasure from '@jbrowse/core/util/useMeasure'
 import { useEffect } from 'react'
-import AppModel from './model'
-import { MSAView } from 'react-msaview'
-import { observer } from 'mobx-react'
+
+import useMeasure from '@jbrowse/core/util/useMeasure'
 import { MenuItem, Slider, TextField, Typography } from '@mui/material'
-import colorSchemes from './colorSchemes'
+import { observer } from 'mobx-react'
+import { isAlive } from 'mobx-state-tree'
+import { MSAView } from 'react-msaview'
+
 import Checkbox2 from './Checkbox2'
+import colorSchemes from './colorSchemes'
+import AppModel from './model'
 
 // used in ViewContainer files to get the width
-function useWidthSetter(view: { setWidth: (arg: number) => void }) {
+function useWidthSetter(view: { setWidth: (argument: number) => void }) {
   const [ref, { width }] = useMeasure()
   useEffect(() => {
     if (width && isAlive(view)) {
