@@ -1,12 +1,4 @@
-import { ungzip } from 'pako'
-
-async function unzipfetch(url: string, arg?: RequestInit) {
-  const res = await fetch(url, arg)
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} from ${url}: ${await res.text()}`)
-  }
-  return ungzip(await res.arrayBuffer(), { to: 'string' })
-}
+import { unzipfetch } from './util'
 
 export async function treeFamFetcher(id: string) {
   return id

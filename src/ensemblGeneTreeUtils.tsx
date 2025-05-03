@@ -1,18 +1,4 @@
-async function jsonfetch(url: string, arg?: RequestInit) {
-  const res = await fetch(url, arg)
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} from ${url}: ${await res.text()}`)
-  }
-  return res.json() as Promise<unknown>
-}
-
-async function textfetch(url: string, arg?: RequestInit) {
-  const res = await fetch(url, arg)
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} from ${url}`)
-  }
-  return res.text()
-}
+import { fetchWithLocalStorageCache, jsonfetch, textfetch } from './util'
 
 interface TreeNode {
   children?: TreeNode[]
@@ -38,26 +24,6 @@ interface Row {
   genomicLocString?: string
 }
 
-async function fetchWithLocalStorageCache<T>(
-  key: string,
-  fetchFn: () => Promise<T>,
-): Promise<T> {
-  const cachedData = localStorage.getItem(key)
-
-  if (cachedData) {
-    try {
-      return JSON.parse(cachedData) as T
-    } catch (error) {
-      console.error(`Error parsing cached data for ${key}:`, error)
-      // Continue to fetch fresh data if parsing fails
-    }
-  }
-
-  const data = await fetchFn()
-  localStorage.setItem(key, JSON.stringify(data))
-  return data
-}
-
 function gatherSequencesFromTree(tree: TreeNode, arr: Row[] = []): Row[] {
   if (tree.children) {
     for (const child of tree.children) {
@@ -79,6 +45,7 @@ function gatherSequencesFromTree(tree: TreeNode, arr: Row[] = []): Row[] {
   }
   return arr
 }
+
 export async function geneTreeFetcher(id: string) {
   const msa = await fetchWithLocalStorageCache(
     `${id}-msa`,
