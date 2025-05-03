@@ -64,7 +64,7 @@ async function fetchWithLocalStorageCache<T>(
   return data
 }
 
-function gatherSequencesFromTree(tree: TreeNode, arr: Row[]) {
+function gatherSequencesFromTree(tree: TreeNode, arr: Row[] = []): Row[] {
   if (tree.children) {
     for (const child of tree.children) {
       if (child.sequence) {
@@ -83,6 +83,7 @@ function gatherSequencesFromTree(tree: TreeNode, arr: Row[]) {
       gatherSequencesFromTree(child, arr)
     }
   }
+  return arr
 }
 export async function geneTreeFetcher(id: string) {
   const msa = await fetchWithLocalStorageCache<any>(`${id}-msa`, () =>
@@ -97,9 +98,7 @@ export async function geneTreeFetcher(id: string) {
     ),
   )
 
-  const result = [] as Row[]
-  gatherSequencesFromTree(msa.tree, result)
-
+  const result = gatherSequencesFromTree(msa.tree)
   return {
     tree,
     msa: result.map(r => `>${r.id}\n${r.seq}`).join('\n'),
