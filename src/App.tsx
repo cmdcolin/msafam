@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { createJBrowseTheme } from '@jbrowse/core/ui/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import { observer } from 'mobx-react'
@@ -8,9 +10,8 @@ import Header from './Header'
 import TreeFamId from './TreeFamId'
 
 const App = observer(function () {
-  // Use nuqs to manage URL state
   const [id, setId] = useQueryState('id', { defaultValue: '' })
-  const [value, setValue] = useQueryState('value', { defaultValue: id })
+  const [value, setValue] = useState(id)
   const [type, setType] = useQueryState('type', {
     defaultValue: 'treeFam' as 'treeFam' | 'geneTree',
     parse: value => (value === 'geneTree' ? 'geneTree' : 'treeFam'),
