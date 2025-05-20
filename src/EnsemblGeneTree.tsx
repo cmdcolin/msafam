@@ -11,6 +11,7 @@ export default function GeneTreeId({ geneTreeId }: { geneTreeId: string }) {
     geneTreeId,
     geneTreeFetcher,
   )
+
   return error ? (
     <ErrorMessage error={error} />
   ) : isLoading ? (

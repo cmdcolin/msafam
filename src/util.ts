@@ -1,11 +1,11 @@
 import { ungzip } from 'pako'
 
-export async function jsonfetch(url: string, arg?: RequestInit) {
+export async function jsonfetch<T>(url: string, arg?: RequestInit) {
   const res = await fetch(url, arg)
   if (!res.ok) {
     throw new Error(`HTTP ${res.status} from ${url}: ${await res.text()}`)
   }
-  return res.json() as Promise<unknown>
+  return res.json() as Promise<T>
 }
 
 export async function textfetch(url: string, arg?: RequestInit) {

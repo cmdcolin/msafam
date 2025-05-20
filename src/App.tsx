@@ -5,7 +5,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { observer } from 'mobx-react'
 import { useQueryState } from 'nuqs'
 
-import GeneTreeId from './GeneTreeId'
+import GeneTreeId from './EnsemblGeneTree'
 import Header from './Header'
 import TreeFamId from './TreeFamId'
 
