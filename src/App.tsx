@@ -7,8 +7,8 @@ import { useQueryState } from 'nuqs'
 
 import GeneTreeId from './EnsemblGeneTree'
 import Header from './Header'
-import PfamId from './PfamId'
 import TreeFamId from './TreeFamId'
+import Pfam from './Pfam'
 
 const App = observer(function () {
   const [id, setId] = useQueryState('id', { defaultValue: '' })
@@ -16,11 +16,7 @@ const App = observer(function () {
   const [type, setType] = useQueryState('type', {
     defaultValue: 'treeFam' as 'treeFam' | 'geneTree' | 'pfam',
     parse: value =>
-      value === 'geneTree'
-        ? 'geneTree'
-        : value === 'pfam'
-          ? 'pfam'
-          : 'treeFam',
+      value === 'geneTree' ? 'geneTree' : value === 'pfam' ? 'pfam' : 'treeFam',
   })
 
   return (
@@ -36,8 +32,10 @@ const App = observer(function () {
       {id ? (
         type === 'geneTree' ? (
           <GeneTreeId geneTreeId={id} />
-        ) : (
+        ) : type === 'treeFam' ? (
           <TreeFamId treeFamId={id} />
+        ) : (
+          <Pfam pfamId={id} />
         )
       ) : null}
     </div>

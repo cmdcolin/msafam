@@ -1,13 +1,19 @@
 import Button from './Button'
 import Link from './Link'
 
+import type { MSATYPE } from './types'
+
 const map = {
   treeFam: 'TreeFam',
   geneTree: 'GeneTree',
+  pfam: 'PFAM',
 } as const
 
 const examples = {
-  pfam: 'wow',
+  pfam: {
+    id: 'PF02171.23',
+    description: 'Piwi domain',
+  },
   treeFam: {
     id: 'TF105041',
     description: 'BRCA2',
@@ -26,8 +32,8 @@ function Header({
   id,
   setId,
 }: {
-  type: 'treeFam' | 'geneTree'
-  setType: (type: 'treeFam' | 'geneTree') => void
+  type: MSATYPE
+  setType: (type: MSATYPE) => void
   val: string
   setVal: (value: string) => void
   id: string
@@ -113,11 +119,17 @@ function Header({
               >
                 See {id} at Ensembl
               </Link>
-            ) : (
+            ) : type === 'treeFam' ? (
               <Link href={`http://www.treefam.org/family/${id}`}>
                 See {id} at TreeFam
               </Link>
-            )
+            ) : type === 'pfam' ? (
+              <Link
+                href={`https://www.ebi.ac.uk/interpro/entry/pfam/${id.split('.')[0]}`}
+              >
+                See {id} at PFAM
+              </Link>
+            ) : null
           ) : null}
         </div>
       </div>

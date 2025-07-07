@@ -40,7 +40,7 @@ const ReactMSAView = observer(function ({
   treeMetadata,
 }: {
   msa: string
-  tree: string
+  tree?: string
   treeMetadata?: string
 }) {
   const ref = useWidthSetter(mymodel.msaview)
