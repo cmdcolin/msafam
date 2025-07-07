@@ -6,6 +6,18 @@ const map = {
   geneTree: 'GeneTree',
 } as const
 
+const examples = {
+  pfam: 'wow',
+  treeFam: {
+    id: 'TF105041',
+    description: 'BRCA2',
+  },
+  geneTree: {
+    id: 'ENSGT00390000003602',
+    description: 'BRCA2',
+  },
+}
+
 function Header({
   type,
   setType,
@@ -45,12 +57,26 @@ function Header({
             checked={type === 'treeFam'}
             value="treeFam"
             onChange={event => {
-              setType(event.target.value as 'treeFam')
+              setType(event.target.value as 'treeFam' | 'pfam')
               setVal('')
               setId('')
             }}
           />
           <label htmlFor="treefam">TreeFam (historical)</label>
+        </div>
+        <div>
+          <input
+            id="pfam"
+            type="radio"
+            checked={type === 'pfam'}
+            value="pfam"
+            onChange={event => {
+              setType(event.target.value as 'pfam')
+              setVal('')
+              setId('')
+            }}
+          />
+          <label htmlFor="pfam">Pfam</label>
         </div>
         <div>
           <label htmlFor="query">Enter {map[type]} ID: </label>
@@ -67,16 +93,11 @@ function Header({
 
           <Button
             onClick={() => {
-              if (type === 'treeFam') {
-                setVal('TF105041')
-                setId('TF105041')
-              } else {
-                setVal('ENSGT00390000003602')
-                setId('ENSGT00390000003602')
-              }
+              setVal(examples[type].id)
+              setId(examples[type].id)
             }}
           >
-            Example
+            Example ({examples[type].id} {examples[type].description})
           </Button>
           <Button
             onClick={() => {

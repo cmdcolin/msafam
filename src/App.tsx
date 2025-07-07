@@ -7,14 +7,20 @@ import { useQueryState } from 'nuqs'
 
 import GeneTreeId from './EnsemblGeneTree'
 import Header from './Header'
+import PfamId from './PfamId'
 import TreeFamId from './TreeFamId'
 
 const App = observer(function () {
   const [id, setId] = useQueryState('id', { defaultValue: '' })
   const [value, setValue] = useState(id)
   const [type, setType] = useQueryState('type', {
-    defaultValue: 'treeFam' as 'treeFam' | 'geneTree',
-    parse: value => (value === 'geneTree' ? 'geneTree' : 'treeFam'),
+    defaultValue: 'treeFam' as 'treeFam' | 'geneTree' | 'pfam',
+    parse: value =>
+      value === 'geneTree'
+        ? 'geneTree'
+        : value === 'pfam'
+          ? 'pfam'
+          : 'treeFam',
   })
 
   return (

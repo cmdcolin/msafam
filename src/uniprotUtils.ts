@@ -72,7 +72,7 @@ async function exampleUsage() {
     await getUniprotIdsFromEnsemblGeneId(anotherEnsemblGeneId)
   if (anotherUniprotIds.length > 0) {
     console.log(`UniProt IDs for Ensembl Gene ID ${anotherEnsemblGeneId}:`)
-    anotherUniprotIds.forEach(protein => {
+    anotherUniprotIds.forEach((protein: { id: string; name: string }) => {
       console.log(`  ID: ${protein.id}, Name: ${protein.name}`)
     })
   } else {
